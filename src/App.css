@@ -1,0 +1,155 @@
+/* קביעת צבעים בסיסיים */
+:root {
+  --primary-color: #28a745;  /* ירוק */
+  --secondary-color: #ffc107;  /* צהוב */
+  --background-color: #f4f6f9;  /* צבע רקע בהיר */
+  --card-background: #ffffff;  /* צבע רקע של קופסאות */
+  --text-color: #333333;  /* צבע טקסט */
+  --button-hover-color: #218838; /* צבע כפתור בעת ריחוף */
+  --button-active-color: #1e7e34; /* צבע כפתור בזמן לחיצה */
+  --border-radius: 8px; /* קוטר פינות */
+}
+
+/* גודל הפונט הכללי */
+body {
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  box-sizing: border-box;
+}
+
+/* מבנה האפליקציה */
+.app-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px;
+  text-align: center;
+}
+
+.app-header {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin-bottom: 10px;
+}
+
+.app-subheader {
+  font-size: 1.25rem;
+  color: var(--text-color);
+  margin-bottom: 30px;
+}
+
+/* כפתור הגדרות */
+.settings-button {
+  background-color: var(--primary-color);
+  color: #fff;
+  font-size: 1rem;
+  padding: 10px 20px;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.settings-button:hover {
+  background-color: var(--button-hover-color);
+}
+
+.settings-button:active {
+  background-color: var(--button-active-color);
+}
+
+/* העיצוב של תוכן הגורם לצפייה במעלה */
+.content-container {
+  background-color: var(--card-background);
+  padding: 30px;
+  border-radius: var(--border-radius);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* עיצוב של קופסה טקסט */
+input[type="text"], input[type="file"], button {
+  padding: 10px 15px;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: var(--border-radius);
+  margin: 10px 0;
+  width: 100%;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus, input[type="file"]:focus {
+  border-color: var(--primary-color);
+  outline: none;
+}
+
+button {
+  background-color: var(--primary-color);
+  color: #fff;
+  border: none;
+  padding: 12px;
+  font-size: 1rem;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: var(--button-hover-color);
+}
+
+button:active {
+  background-color: var(--button-active-color);
+}
+
+/* תגיות וסטיילים לכל נתון שהופק */
+.extracted-data {
+  background-color: var(--card-background);
+  padding: 20px;
+  margin-top: 30px;
+  border-radius: var(--border-radius);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.extracted-data h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  margin-bottom: 15px;
+}
+
+.extracted-data .summary {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.extracted-data .line-items-table {
+  margin-top: 20px;
+}
+
+.extracted-data .line-items-table table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.extracted-data .line-items-table th,
+.extracted-data .line-items-table td {
+  padding: 12px;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+.extracted-data .line-items-table th {
+  background-color: var(--secondary-color);
+  color: #fff;
+  font-weight: bold;
+}
+
+.extracted-data .line-items-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
