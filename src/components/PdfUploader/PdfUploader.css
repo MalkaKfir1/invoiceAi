@@ -87,6 +87,25 @@ canvas {
   margin-top: 1rem;
   table-layout: fixed;
 }
+.upload-label {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.upload-label:hover {
+  background-color: #45a049;
+}
+
+.hidden-input {
+  display: none;
+}
+
 
 .line-items-table th,
 .line-items-table td {

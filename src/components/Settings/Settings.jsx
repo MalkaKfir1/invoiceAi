@@ -34,12 +34,12 @@ const Settings = ({ setOpenAIKey, setAzureOpenAIKey }) => {
     }
 
     if (!validateAPIKey(openAIKey)) {
-      setError("המפתח חייב חייב  להיות עד 8 תווים OpenAI לא תקין");
+      setError("מפתח OpenAI לא תקין – חייב להכיל בדיוק 8 תווים");
       return;
     }
 
     if (!validateAPIKey(azureOpenAIKey)) {
-      setError("המפתח חייב חייב  להיות עד 8 תווים  Azure OpenAI לא תקין");
+      setError("מפתח OpenAI Azure  לא תקין – חייב להכיל בדיוק 8 תווים");
       
       return;
     }
