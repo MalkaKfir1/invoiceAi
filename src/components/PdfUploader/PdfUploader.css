@@ -1,121 +1,100 @@
-/* PdfUploader.css */
-
 .container {
-  max-width: 600px;
+  max-width: 800px;
   margin: 0 auto;
-  padding: 2em;
+  padding: 2rem;
   text-align: center;
+  background-color: #f7faff;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  direction: rtl;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .upload-label {
-  padding: 12px 24px;
+  display: inline-block;
+  padding: 14px 28px;
   background-color: #0078d4;
   color: #fff;
-  border-radius: 8px;
+  font-weight: bold;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.1rem;
   cursor: pointer;
-  display: inline-block;
+  transition: background-color 0.3s ease;
+  margin-bottom: 1.5rem;
 }
-canvas {
-  max-width: 100%;
-  height: auto;
+
+.upload-label:hover:not(.disabled) {
+  background-color: #005fa3;
 }
+
 .upload-label.disabled {
   background-color: #ccc;
   cursor: not-allowed;
 }
 
-.text-output {
-  margin-top: 20px;
-  background-color: #f9f9f9;
-  padding: 1em;
-  border-radius: 8px;
-  text-align: right;
-  direction: rtl;
-  white-space: pre-wrap;
- 
+canvas {
+  max-width: 100%;
+  height: auto;
 }
 
+.text-output {
+  background-color: #ffffff;
+  padding: 1.5rem;
+  border-radius: 12px;
+  text-align: right;
+  white-space: pre-wrap;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  margin-bottom: 2rem;
+  border-right: 4px solid #0078d4;
+}
 
 .extracted-data {
-  margin-top: 30px;
-  padding: 20px;
-  background-color: #f0f8ff;
-  border-radius: 8px;
+  padding: 1.5rem;
+  background-color: #e9f5ff;
+  border-radius: 12px;
+  border: 2px dashed #0078d4;
   text-align: right;
-  direction: rtl;
-  border: 2px solid #0078d4;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
 }
 
 .extracted-data h3 {
   margin-top: 0;
-  color: #0078d4;
-  border-bottom: 1px solid #0078d4;
-  padding-bottom: 10px;
+  color: #004f8c;
+  font-size: 1.5rem;
+  border-bottom: 2px solid #0078d4;
+  padding-bottom: 0.5rem;
 }
 
 .summary, .line-items-table {
-  background-color: white;
-  padding: 15px;
-  border-radius: 5px;
-  margin-bottom: 20px;
-}
-
-.summary h4 {
-  margin: 0 0 10px 0;
-  color: #0078d4;
+  background-color: #ffffff;
+  padding: 1rem;
+  border-radius: 10px;
+  margin-top: 1.5rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
 }
 
 .summary span {
   display: block;
-  margin-bottom: 5px;
-}
-
-.summary .confidence {
-  font-weight: bold;
-}
-
-.field {
-  padding: 10px;
-  border-left: 3px solid #0078d4;
-}
-
-.field.success {
-  border-left-color: #28a745;
-}
-
-.field.warning {
-  border-left-color: #ffc107;
-}
-
-.field.error {
-  border-left-color: #dc3545;
-}
-
-.field strong {
-  display: block;
-}
-
-.field span {
-  font-size: 1.1em;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
   color: #333;
 }
 
-.field .confidence {
-  margin-top: 5px;
-  font-size: 0.9em;
-  font-weight: bold;
-}
-
 .line-items-table table {
-  width: 100%;
+  /* width: 100%; */
   border-collapse: collapse;
+  margin-top: 1rem;
+  table-layout: fixed;
 }
 
 .line-items-table th,
 .line-items-table td {
-  border: 1px solid #ddd;
+  border: 1px solid #ccc;
   padding: 12px;
   text-align: right;
+  font-size: 1rem;
+  word-break: break-word;
 }
 
 .line-items-table th {
@@ -124,12 +103,27 @@ canvas {
 }
 
 .line-items-table tbody tr:nth-child(even) {
-  background-color: #f8f9fa;
+  background-color: #f2f8fc;
+}
+
+.line-items-table td:first-child {
+  width: 10%;
+  text-align: center;
+  font-weight: bold;
+  color: #0078d4;
+}
+
+.line-items-table td:last-child {
+  width: 90%;
 }
 
 .warning-message {
   background-color: #fff3cd;
   padding: 15px;
-  border-radius: 5px;
+  border-radius: 8px;
   border: 1px solid #ffeaa7;
+  font-weight: bold;
+  color: #856404;
+  margin-top: 1rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 }
