@@ -16,7 +16,7 @@
     "react-dom": "^19.1.0",
     "react-dropzone": "14.3.8",
     "react-modal": "3.16.3",
-    "tesseract.js": "2.1.5"
+    "tesseract.js": "^5.0.4"
   },
   "devDependencies": {
     "@eslint/js": "^9.30.1",

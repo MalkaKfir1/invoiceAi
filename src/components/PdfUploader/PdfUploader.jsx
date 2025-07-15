@@ -2,8 +2,12 @@ import React, { useEffect, useRef, useState } from "react";
 import { createWorker } from "tesseract.js";
 import * as pdfjsLib from "pdfjs-dist";
 import "./PdfUploader.css";
+import * as pdfjsLib from "pdfjs-dist";
+import pdfjsWorker from "pdfjs-dist/build/pdf.worker.entry";
 
-pdfjsLib.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.js"
+pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorker;
+
+pdfjsLib.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.js";
 
 export default function PdfUploader() {
   const [text, setText] = useState("");
@@ -14,7 +18,7 @@ export default function PdfUploader() {
 
   useEffect(() => {
     const initWorker = async () => {
-      const worker = await createWorker({ logger: (m) => console.log(m) });
+      const worker = await createWorker({ logger: m => console.log(m) });
       await worker.load();
       await worker.loadLanguage("heb+eng");
       await worker.initialize("heb+eng");
@@ -40,6 +44,7 @@ export default function PdfUploader() {
       totalAmount: { value: null, confidence: 0 },
       lineItems: []
     };
+
     const lines = text.split("\n").map(l => l.trim()).filter(Boolean);
 
     const findPattern = (patterns, field) => {
@@ -57,27 +62,29 @@ export default function PdfUploader() {
     findPattern([
       { pattern: /(?:חשבונית|invoice)[^\d]*(\d+)/i, confidence: 95 },
       { pattern: /מס[׳"]?\s*(\d+)/, confidence: 85 },
-      { pattern: /(^\d{5,})/, confidence: 70 },
+      { pattern: /(^\d{5,})/, confidence: 70 }
     ], "invoiceNumber");
 
     findPattern([
       { pattern: /תאריך[^\d]*(\d{1,2}[\.\/-]\d{1,2}[\.\/-]\d{2,4})/, confidence: 95 },
-      { pattern: /\b(\d{1,2}[\.\/-]\d{1,2}[\.\/-]\d{2,4})\b/, confidence: 85 },
+      { pattern: /\b(\d{1,2}[\.\/-]\d{1,2}[\.\/-]\d{2,4})\b/, confidence: 85 }
     ], "date");
 
     findPattern([
       { pattern: /(?:ספק|שם העסק)[\s:]*([א-ת\s"']+)/, confidence: 90 },
-      { pattern: /^([א-ת][א-ת\s]{3,20})$/, confidence: 70 },
+      { pattern: /^([א-ת][א-ת\s]{3,20})$/, confidence: 70 }
     ], "supplier");
 
     findPattern([
-      { pattern: /(?:סך[^\d]*|לתשלום|total)[\s:]*([\d,\.]+)/i, confidence: 95 },
-      { pattern: /₪\s*([\d,\.]+)/, confidence: 85 },
+      { pattern: /(?:סכום|סה"כ|לתשלום)[^\d]*[:\s]*([\d,\.]+)/, confidence: 95 },
+      { pattern: /₪\s*([\d,\.]+)/, confidence: 85 }
     ], "totalAmount");
 
-    // נסה לחלץ פריטי שורה (line items) בסיסיים
     data.lineItems = lines
-      .filter(l => /\d+\s*[xX]\s*\d+/.test(l) || /₪/.test(l))
+      .filter(l =>
+        (/\d+\s*[xX]\s*\d+/.test(l) || /₪/.test(l) || /\d{1,3}[.,]?\d{0,2}/.test(l)) &&
+        l.split(/\s+/).length >= 3
+      )
       .map(l => ({ line: l }));
 
     return data;
