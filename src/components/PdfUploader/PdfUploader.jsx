@@ -57,10 +57,11 @@ export default function PdfUploader() {
   };
 
   function extractFields(text) {
-    const invoiceNumber = text.match(/מספר\s*חשבונית\s*[:\-]?\s*(\S+)/)?.[1] || "לא זוהה";
-    const date = text.match(/תאריך\s*[:\-]?\s*(\d{2}[\/.\-]\d{2}[\/.\-]\d{4})/)?.[1] || "לא זוהה";
-    const vendor = text.match(/ספק\s*[:\-]?\s*(.+)/)?.[1]?.trim() || "לא זוהה";
-    const total = text.match(/לתשלום\s*[:\-]?\s*(\d+[.,]?\d*)/)?.[1] || "לא זוהה";
+    const invoiceNumber = text.match(/(?:מספר\s*(?:חשבונית|קבלה)|חשבונית\s*מס')\s*[:\-]?\s*(\S+)/i)?.[1] || "לא זוהה";
+    const date = text.match(/(?:תאריך\s*(?:הנפקה|קבלה)?|נוצר[ה]?\s?ב(?:תאריך)?)\s*[:\-]?\s*(\d{1,2}[\/.\-]\d{1,2}[\/.\-]\d{2,4})/i)?.[1] || "לא זוהה";
+    const vendor = text.match(/(?:ספק|שם\s*החנות|קבלה\s*-\s*)(.+)/i)?.[1]?.trim() || "לא זוהה";
+
+    const total = text.match(/(?:סה"כ(?:\s*לתשלום)?|סך\s*הכל|סה"כ כולל)\s*[:\-]?\s*(₪?\s*\d+[.,]?\d*)/i)?.[1] || "לא זוהה";
 
     const lineItems = text
       .split("\n")
@@ -72,7 +73,7 @@ export default function PdfUploader() {
   return (
     <div>
       <label htmlFor="pdf-upload" className="upload-label">
-        📤 pdf בחק קובץ 
+        📤 pdf בחק קובץ
       </label>
 
       <input
@@ -104,8 +105,8 @@ export default function PdfUploader() {
             <p>{confidence.toFixed(1)}% <strong>🎯:דיוק OCR</strong> </p>
           )}
           <div style={{ marginTop: "10px" }}>
-                 <h3 className="green">🛒 רשימת פריטים</h3>
-           
+            <h3 className="green">🛒 רשימת פריטים</h3>
+
             <table className="invoice-table">
               <thead>
                 <tr>
