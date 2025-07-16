@@ -1,12 +1,47 @@
-# React + Vite
+<div dir="rtl">
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# 🧾 Invoice AI Mini Product
 
-Currently, two official plugins are available:
+🔍 אפליקציה מבוססת React לזיהוי אוטומטי של נתוני חשבונית מ־PDF באמצעות OCR ו־AI (OpenAI).  
+מאפשרת העלאת קובץ, חילוץ פרטים, שיפור באמצעות GPT-4, והצגת אחוזי דיוק.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## 🔗 דמו חי
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+🌐 [לחצי כאן לצפייה באפליקציה החיה ב‑Netlify](https://invoice-ai-test.netlify.app)
+
+---
+
+## ⚙️ תכונות עיקריות
+
+- ✅ העלאת קובצי PDF לחשבוניות  
+- 🔍 OCR באמצעות Tesseract.js  
+- 📊 הצגת נתוני חשבונית עם Confidence  
+- 🤖 שיפור תוצאה בעזרת GPT‑4  
+- 🛠️ מסך הגדרות להזנת API Keys  
+- 📄 טבלת פריטים  
+- 🟩 פס אחוזים צבעוני  
+- ☁️ שילוב עם Supabase  
+
+---
+
+## 📥 שדות שחולצו
+
+- מספר חשבונית  
+- תאריך  
+- ספק  
+- סכום לפני מע״מ  
+- סך הכל כולל  
+- פריטי שורה  
+
+
+### 🧠 טכנולוגיות בשימוש
+| רכיב          | טכנולוגיה        |
+|---------------|------------------|
+| ממשק          | React (Bolt.new) |
+| OCR           | Tesseract.js     |
+| אינטגרציית AI | OpenAI GPT-4     |
+| מסד נתונים    | Supabase         |
+| אחסון         | Netlify          |
+</div>

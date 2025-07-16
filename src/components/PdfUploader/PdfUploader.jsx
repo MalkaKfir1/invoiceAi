@@ -1,19 +1,20 @@
 import React, { useRef, useState } from "react";
 import { createWorker } from "tesseract.js";
 import * as pdfjsLib from "pdfjs-dist";
+import ConfidenceBar from './ConfidenceBar/ConfidenceBar';
+import { improveInvoiceDataWithOpenAI } from "../aiHelper";
 import './PdfUploader.css';
-import ConfidenceBar from './ConfidenceBar/ConfidenceBar'
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
   "pdfjs-dist/build/pdf.worker.min.js",
   import.meta.url
 ).toString();
 
-export default function PdfUploader() {
+export default function PdfUploader({ openAIKey }) {
   const [text, setText] = useState("");
   const [extractedData, setExtractedData] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [confidence, setConfidence] = useState(null);
+  const [ocrConfidence, setOcrConfidence] = useState(null);
   const [error, setError] = useState("");
   const fileInputRef = useRef(null);
 
@@ -23,6 +24,7 @@ export default function PdfUploader() {
 
     setLoading(true);
     setError("");
+    setExtractedData(null);
 
     const fileReader = new FileReader();
     fileReader.onload = async function () {
@@ -46,25 +48,48 @@ export default function PdfUploader() {
         const result = await worker.recognize(imageData);
         await worker.terminate();
 
-        setConfidence(result.data.confidence);
+        setOcrConfidence(result.data.confidence);
         const rawText = result.data.text;
         setText(rawText);
 
-        const extracted = extractFields(rawText);
-        setExtractedData(extracted);
+        const initialExtracted = extractFields(rawText);
+        let finalExtracted = { ...initialExtracted };
 
-        const apiKey = localStorage.getItem("openai_api_key");
-        if (apiKey) {
+        if (openAIKey) {
           try {
-            const aiResultText = await improveInvoiceDataWithOpenAI(rawText, apiKey);
-            const aiExtracted = extractFields(aiResultText);
-            aiExtracted.isAIEnhanced = true;
-            setExtractedData(aiExtracted);
+            const aiData = await improveInvoiceDataWithOpenAI(rawText, openAIKey);
+            if (aiData) {
+              finalExtracted.invoiceNumber = {
+                value: aiData.invoiceNumber || finalExtracted.invoiceNumber.value,
+                confidence: 98,
+              };
+              finalExtracted.date = {
+                value: aiData.date || finalExtracted.date.value,
+                confidence: 97,
+              };
+              finalExtracted.vendor = {
+                value: aiData.vendor || finalExtracted.vendor.value,
+                confidence: 96,
+              };
+              finalExtracted.beforeVat = {
+                value: aiData.beforeVat || finalExtracted.beforeVat.value,
+                confidence: 95,
+              };
+              finalExtracted.total = {
+                value: aiData.total || finalExtracted.total.value,
+                confidence: 97,
+              };
+              if (Array.isArray(aiData.lineItems)) {
+                finalExtracted.lineItems = aiData.lineItems;
+              }
+              finalExtracted.isAIEnhanced = true;
+            }
           } catch (err) {
-            console.error("שגיאה בשימוש ב-AI:", err);
+            console.error("שגיאה מ-AI:", err);
           }
         }
 
+        setExtractedData(finalExtracted);
 
         const formData = new FormData();
         formData.append("file", file);
@@ -74,7 +99,7 @@ export default function PdfUploader() {
           body: formData,
         });
 
-        if (!res.ok) throw new Error("שגיאה בשליחה ל-Function");
+        if (!res.ok) throw new Error("שגיאה בשליחה ל־Function");
 
         const serverResponse = await res.json();
         console.log("נשמר לשרת:", serverResponse);
@@ -95,8 +120,7 @@ export default function PdfUploader() {
       const match = text.match(regex);
       if (!match) return { value: "לא זוהה", confidence: Math.random() * 20 + 30 };
       const raw = match[1].trim();
-      const baseConfidence = Math.random() * 20 + 75;
-      return { value: raw, confidence: baseConfidence };
+      return { value: raw, confidence: Math.random() * 20 + 75 };
     }
 
     const invoiceNumber = extractWithConfidence(/(?:מספר\s*(?:חשבונית|קבלה)|חשבונית\s*מס')\s*[:\-]?\s*(\S+)/i);
@@ -107,7 +131,8 @@ export default function PdfUploader() {
 
     const lineItems = text
       .split("\n")
-      .filter(line => /\d+\s*(x|×)?\s*.+\s+[\d.,]+/.test(line));
+      .filter(line => /\d+\s*(x|×)?\s*.+\s+[\d.,]+/.test(line))
+      .map((line) => ({ description: line }));
 
     return { invoiceNumber, date, vendor, beforeVat, total, lineItems };
   }
@@ -122,39 +147,38 @@ export default function PdfUploader() {
 
       {text && (
         <div style={{ marginTop: "20px" }}>
-          <h3 className="green">: טקסט שחולץ</h3>
+          <h3 className="green">טקסט שחולץ</h3>
           <pre className="text">{text}</pre>
         </div>
       )}
 
       {extractedData && (
         <div style={{ marginTop: "20px" }}>
-          <h3 className="green">נתונים מהחשבונית</h3>
-          <p>
-            <strong>מספר חשבונית:</strong> {extractedData.invoiceNumber.value}
+          <h3 className="green">נתונים מהחשבונית {extractedData.isAIEnhanced && "(משופר על ידי AI)"}</h3>
+
+          <p><strong>מספר חשבונית:</strong> {extractedData.invoiceNumber.value}
             <ConfidenceBar value={extractedData.invoiceNumber.confidence} />
           </p>
 
-          <p>
-            <strong>תאריך:</strong> {extractedData.date.value}
+          <p><strong>תאריך:</strong> {extractedData.date.value}
             <ConfidenceBar value={extractedData.date.confidence} />
           </p>
 
-          <p>
-            <strong>ספק:</strong> {extractedData.vendor.value}
+          <p><strong>ספק:</strong> {extractedData.vendor.value}
             <ConfidenceBar value={extractedData.vendor.confidence} />
           </p>
 
-          <p>
-            <strong>סכום לפני מע״מ:</strong> {extractedData.beforeVat.value}
+          <p><strong>לפני מע״מ:</strong> {extractedData.beforeVat.value}
             <ConfidenceBar value={extractedData.beforeVat.confidence} />
           </p>
 
-          <p>
-            <strong>סכום כולל:</strong> {extractedData.total.value}
+          <p><strong>סה"כ כולל:</strong> {extractedData.total.value}
             <ConfidenceBar value={extractedData.total.confidence} />
           </p>
-          {confidence !== null && <p><strong>דיוק OCR כולל:</strong> {confidence.toFixed(1)}%</p>}
+
+          {ocrConfidence !== null && (
+            <p><strong>דיוק OCR כולל:</strong> {ocrConfidence.toFixed(1)}%</p>
+          )}
 
           <div style={{ marginTop: "10px" }}>
             <h3 className="green">רשימת פריטים</h3>
@@ -162,7 +186,10 @@ export default function PdfUploader() {
               <thead><tr><th>#</th><th>תיאור</th></tr></thead>
               <tbody>
                 {extractedData.lineItems.map((item, idx) => (
-                  <tr key={idx}><td>{idx + 1}</td><td>{item}</td></tr>
+                  <tr key={idx}>
+                    <td>{idx + 1}</td>
+                    <td>{typeof item === "string" ? item : item.description}</td>
+                  </tr>
                 ))}
               </tbody>
             </table>
