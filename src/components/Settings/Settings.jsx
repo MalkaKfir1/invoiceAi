@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Modal from "react-modal";
-import "./Settings.css"; // כולל את קובץ ה-CSS
+import "./Settings.css"; 
 
-// מגדירים את ה-root של המודל (אם את משתמשת במודלים)
 Modal.setAppElement("#root");
 
 const Settings = ({ setOpenAIKey, setAzureOpenAIKey }) => {
@@ -10,9 +9,7 @@ const Settings = ({ setOpenAIKey, setAzureOpenAIKey }) => {
   const [azureOpenAIKey, setAzureOpenAIKeyLocal] = useState("");
   const [error, setError] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false); // משתנה לטעינה
-
-  // קריאת המפתחות מ-localStorage
+  const [isLoading, setIsLoading] = useState(false); 
   useEffect(() => {
     const storedOpenAIKey = localStorage.getItem("openAIKey");
     const storedAzureOpenAIKey = localStorage.getItem("azureOpenAIKey");
@@ -21,12 +18,10 @@ const Settings = ({ setOpenAIKey, setAzureOpenAIKey }) => {
     if (storedAzureOpenAIKey) setAzureOpenAIKeyLocal(storedAzureOpenAIKey);
   }, []);
 
-  // פונקציה לוולידציה של המפתח (כדוגמת בדיקת אורך מפתח או תבנית ספציפית)
   const validateAPIKey = (key) => {
-    return key && key.length === 8; // אורך מפתח לדוגמה (לשנות לפי הצורך)
+    return key && key.length === 8; 
   };
 
-  // פונקציה לשמירה
   const handleSave = async () => {
     if (!openAIKey || !azureOpenAIKey) {
       setError("שני המפתחות חייבים להיות מלאים");
@@ -45,22 +40,18 @@ const Settings = ({ setOpenAIKey, setAzureOpenAIKey }) => {
     }
 
     try {
-      setIsLoading(true); // התחלת טעינה
-
-      // שומר את המפתחות בסטייט וב-localStorage
+      setIsLoading(true);
       setOpenAIKey(openAIKey);
       setAzureOpenAIKey(azureOpenAIKey);
       localStorage.setItem("openAIKey", openAIKey);
       localStorage.setItem("azureOpenAIKey", azureOpenAIKey);
 
-      setError(""); // מנקה את השגיאה
-
-      // פותחים את המודל להודעת הצלחה
+      setError(""); 
       setIsModalOpen(true);
     } catch (e) {
       setError("התרחשה שגיאה בשמירה, אנא נסה שנית.");
     } finally {
-      setIsLoading(false); // סיום טעינה
+      setIsLoading(false); 
     }
   };
 
@@ -91,8 +82,6 @@ const Settings = ({ setOpenAIKey, setAzureOpenAIKey }) => {
       <button onClick={handleSave} disabled={isLoading}>
         {isLoading ? "שומר..." : "שמור הגדרות"}
       </button>
-
-      {/* מודל של הצלחה */}
       <Modal
         isOpen={isModalOpen}
         onRequestClose={() => setIsModalOpen(false)}
