@@ -37,7 +37,7 @@ body {
 
 .app-subheader {
   font-size: 1.25rem;
-  color: var(--text-color);
+  color: green;
   margin-bottom: 30px;
 }
 

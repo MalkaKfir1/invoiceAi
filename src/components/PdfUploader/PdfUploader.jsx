@@ -72,7 +72,7 @@ export default function PdfUploader() {
   return (
     <div>
       <label htmlFor="pdf-upload" className="upload-label">
-        📤 בחר קובץ PDF
+        📤 pdf בחק קובץ 
       </label>
 
       <input
@@ -84,43 +84,45 @@ export default function PdfUploader() {
         className="hidden-input"
       />
 
-      {loading && <p>🔄 מפענח את הקובץ..., אנא המתן</p>}
+      {loading && <p className="txtColorGreen">🔄 מפענח את הקובץ..., אנא המתן</p>}
 
       {text && (
         <div style={{ marginTop: "20px" }}>
-          <h3>📄 :טקסט שחולץ</h3>
-          <pre style={{ background: "#f0f0f0", padding: "10px", whiteSpace: "pre-wrap" }}>{text}</pre>
+          <h3 className="green">📄 :טקסט שחולץ</h3>
+          <pre className="text">{text}</pre>
         </div>
       )}
 
       {extractedData && (
         <div style={{ marginTop: "20px" }}>
-          <h3>📋 נתונים מהחשבונית</h3>
+          <h3 className="green">📋 נתונים מהחשבונית</h3>
           <p><strong>📎 מספר חשבונית:</strong> {extractedData.invoiceNumber}</p>
           <p><strong>📅 תאריך:</strong> {extractedData.date}</p>
           <p><strong>🏢 ספק:</strong> {extractedData.vendor}</p>
           <p><strong>💰 סכום כולל:</strong> {extractedData.total}</p>
           {confidence !== null && (
-            <p><strong>🎯 דיוק OCR:</strong> {confidence.toFixed(1)}%</p>
+            <p>{confidence.toFixed(1)}% <strong>🎯:דיוק OCR</strong> </p>
           )}
           <div style={{ marginTop: "10px" }}>
-            <strong>🛒 רשימת פריטים:</strong>
-            <table style={{ width: "100%", borderCollapse: "collapse", marginTop: "10px" }}>
+                 <h3 className="green">🛒 רשימת פריטים</h3>
+           
+            <table className="invoice-table">
               <thead>
-                <tr style={{ backgroundColor: "#f8f8f8" }}>
-                  <th style={{ border: "1px solid #ccc", padding: "8px" }}>#</th>
-                  <th style={{ border: "1px solid #ccc", padding: "8px" }}>תיאור שורה</th>
+                <tr>
+                  <th className="right-align">#</th>
+                  <th>תיאור </th>
                 </tr>
               </thead>
               <tbody>
                 {extractedData.lineItems.map((item, idx) => (
                   <tr key={idx}>
-                    <td style={{ border: "1px solid #ccc", padding: "8px", textAlign: "center" }}>{idx + 1}</td>
-                    <td style={{ border: "1px solid #ccc", padding: "8px" }}>{item}</td>
+                    <td className="right-align">{idx + 1}</td>
+                    <td className="right-align">{item}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
+
           </div>
 
         </div>

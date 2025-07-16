@@ -10,23 +10,7 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.upload-label {
-  display: inline-block;
-  padding: 14px 28px;
-  background-color: #0078d4;
-  color: #fff;
-  font-weight: bold;
-  border: none;
-  border-radius: 12px;
-  font-size: 1.1rem;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  margin-bottom: 1.5rem;
-}
 
-.upload-label:hover:not(.disabled) {
-  background-color: #005fa3;
-}
 
 .upload-label.disabled {
   background-color: #ccc;
@@ -94,10 +78,17 @@ canvas {
   color: white;
   border-radius: 8px;
   cursor: pointer;
-  font-weight: bold;
-  transition: background-color 0.3s ease;
 }
-
+.text{
+  background: #f0f0f0;
+   padding: 10px;
+   white-space: pre-wrap;
+   font-size: x-large;
+   font: optional;
+}
+.green{
+  color: green;
+}
 .upload-label:hover {
   background-color: #45a049;
 }
@@ -146,3 +137,24 @@ canvas {
   margin-top: 1rem;
   box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 }
+.invoice-table {
+  width: 100%;
+  border-collapse: collapse;
+  direction: rtl;
+}
+
+.invoice-table th,
+.invoice-table td {
+  border: 1px solid #ccc;
+  padding: 8px;
+}
+
+.invoice-table th {
+  background-color: #f8f8f8;
+}
+
+.right-align {
+  text-align: right;
+}
+
+
