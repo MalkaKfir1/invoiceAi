@@ -1,47 +1,46 @@
-<div dir="rtl">
-
 # 🧾 Invoice AI Mini Product
 
-🔍 אפליקציה מבוססת React לזיהוי אוטומטי של נתוני חשבונית מ־PDF באמצעות OCR ו־AI (OpenAI).  
-מאפשרת העלאת קובץ, חילוץ פרטים, שיפור באמצעות GPT-4, והצגת אחוזי דיוק.
+🔍 A React-based web app for automatic extraction of invoice data from PDF files using OCR and OpenAI GPT-4.  
+Users can upload PDF invoices, view extracted fields with confidence levels, and enhance parsing accuracy using AI.
 
 ---
 
-## 🔗 דמו חי
+## 🔗 Live Demo
 
-🌐 [לחצי כאן לצפייה באפליקציה החיה ב‑Netlify](https://invoice-ai-test.netlify.app)
-
----
-
-## ⚙️ תכונות עיקריות
-
-- ✅ העלאת קובצי PDF לחשבוניות  
-- 🔍 OCR באמצעות Tesseract.js  
-- 📊 הצגת נתוני חשבונית עם Confidence  
-- 🤖 שיפור תוצאה בעזרת GPT‑4  
-- 🛠️ מסך הגדרות להזנת API Keys  
-- 📄 טבלת פריטים  
-- 🟩 פס אחוזים צבעוני  
-- ☁️ שילוב עם Supabase  
+🌐 [Click here to view the live Netlify app](https://invoice-ai-test.netlify.app)
 
 ---
 
-## 📥 שדות שחולצו
+## ⚙️ Key Features
 
-- מספר חשבונית  
-- תאריך  
-- ספק  
-- סכום לפני מע״מ  
-- סך הכל כולל  
-- פריטי שורה  
+- ✅ Upload PDF invoices  
+- 🔍 OCR using Tesseract.js  
+- 📊 Display extracted invoice data with confidence percentage  
+- 🤖 Enhanced parsing using GPT-4 (OpenAI)  
+- 🛠️ Settings screen for managing API Keys  
+- 📄 Line-item table display  
+- 🟩 Visual confidence bars (color-based)  
+- ☁️ Integration with Supabase & Edge Functions  
 
+---
 
-### 🧠 טכנולוגיות בשימוש
-| רכיב          | טכנולוגיה        |
-|---------------|------------------|
-| ממשק          | React (Bolt.new) |
-| OCR           | Tesseract.js     |
-| אינטגרציית AI | OpenAI GPT-4     |
-| מסד נתונים    | Supabase         |
-| אחסון         | Netlify          |
-</div>
+## 📥 Extracted Fields
+
+- Invoice Number  
+- Date  
+- Vendor  
+- Before VAT  
+- Total Amount  
+- Line Items  
+
+---
+
+## 🧠 Technologies Used
+
+| Component       | Technology        |
+|-----------------|-------------------|
+| Frontend        | React (Bolt.new)  |
+| OCR             | Tesseract.js      |
+| AI Integration  | OpenAI GPT-4      |
+| Database        | Supabase          |
+| Hosting         | Netlify           |
