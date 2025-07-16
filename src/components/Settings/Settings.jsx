@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Modal from "react-modal";
-import "./Settings.css"; 
+import "./Settings.css";
 
 Modal.setAppElement("#root");
 
@@ -9,33 +9,33 @@ const Settings = ({ setOpenAIKey, setAzureOpenAIKey }) => {
   const [azureOpenAIKey, setAzureOpenAIKeyLocal] = useState("");
   const [error, setError] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false); 
+  const [isLoading, setIsLoading] = useState(false);
+
   useEffect(() => {
-    const storedOpenAIKey = localStorage.getItem("openAIKey");
-    const storedAzureOpenAIKey = localStorage.getItem("azureOpenAIKey");
+    const storedOpenAIKey = localStorage.getItem("openai_api_key");
+    const storedAzureKey = localStorage.getItem("azure_openai_key");
 
     if (storedOpenAIKey) setOpenAIKeyLocal(storedOpenAIKey);
-    if (storedAzureOpenAIKey) setAzureOpenAIKeyLocal(storedAzureOpenAIKey);
+    if (storedAzureKey) setAzureOpenAIKeyLocal(storedAzureKey);
   }, []);
 
-  const validateAPIKey = (key) => {
-    return key && key.length === 8; 
+  const validateKey = (key) => {
+    return typeof key === "string" && key.length >= 8;
   };
 
-  const handleSave = async () => {
+  const handleSave = () => {
     if (!openAIKey || !azureOpenAIKey) {
-      setError("שני המפתחות חייבים להיות מלאים");
+      setError("נא להזין את שני המפתחות");
       return;
     }
 
-    if (!validateAPIKey(openAIKey)) {
-      setError("מפתח OpenAI לא תקין – חייב להכיל בדיוק 8 תווים");
+    if (!validateKey(openAIKey)) {
+      setError("מפתח OpenAI לא תקין (חייב להכיל לפחות 8 תווים)");
       return;
     }
 
-    if (!validateAPIKey(azureOpenAIKey)) {
-      setError("מפתח OpenAI Azure  לא תקין – חייב להכיל בדיוק 8 תווים");
-      
+    if (!validateKey(azureOpenAIKey)) {
+      setError("מפתח Azure OpenAI לא תקין (חייב להכיל לפחות 8 תווים)");
       return;
     }
 
@@ -43,45 +43,48 @@ const Settings = ({ setOpenAIKey, setAzureOpenAIKey }) => {
       setIsLoading(true);
       setOpenAIKey(openAIKey);
       setAzureOpenAIKey(azureOpenAIKey);
-      localStorage.setItem("openAIKey", openAIKey);
-      localStorage.setItem("azureOpenAIKey", azureOpenAIKey);
+      localStorage.setItem("openai_api_key", openAIKey);
+      localStorage.setItem("azure_openai_key", azureOpenAIKey);
 
-      setError(""); 
+      setError("");
       setIsModalOpen(true);
-    } catch (e) {
-      setError("התרחשה שגיאה בשמירה, אנא נסה שנית.");
+    } catch {
+      setError("אירעה שגיאה בשמירה, אנא נסי שוב.");
     } finally {
-      setIsLoading(false); 
+      setIsLoading(false);
     }
   };
 
   return (
     <div className="settings-container">
-      <h3>הגדרות API</h3>
-    
+      <h2>🔐 הגדרות מפתחות API</h2>
+
       {error && <div className="error-message">{error}</div>}
-      <div>
-        <label>מפתח OpenAI:</label>
-  
+
+      <div className="form-group">
+        <label>🔑 מפתח OpenAI</label>
         <input
           type="text"
           value={openAIKey}
           onChange={(e) => setOpenAIKeyLocal(e.target.value)}
-          placeholder="הזן מפתח OpenAI"
+          placeholder="sk-..."
         />
       </div>
-      <div>
-        <label>מפתח Azure OpenAI:</label>
+
+      <div className="form-group">
+        <label>🔑 מפתח Azure OpenAI</label>
         <input
           type="text"
           value={azureOpenAIKey}
           onChange={(e) => setAzureOpenAIKeyLocal(e.target.value)}
-          placeholder="הזן מפתח Azure OpenAI"
+          placeholder="azure-..."
         />
       </div>
-      <button onClick={handleSave} disabled={isLoading}>
-        {isLoading ? "שומר..." : "שמור הגדרות"}
+
+      <button className="save-btn" onClick={handleSave} disabled={isLoading}>
+        {isLoading ? "שומר..." : "💾 שמור הגדרות"}
       </button>
+
       <Modal
         isOpen={isModalOpen}
         onRequestClose={() => setIsModalOpen(false)}
@@ -89,7 +92,7 @@ const Settings = ({ setOpenAIKey, setAzureOpenAIKey }) => {
         className="modal-content"
         overlayClassName="modal-overlay"
       >
-        <h3>הגדרות נשמרו בהצלחה!</h3>
+        <h3>✅ הגדרות נשמרו בהצלחה!</h3>
         <button onClick={() => setIsModalOpen(false)}>סגור</button>
       </Modal>
     </div>
