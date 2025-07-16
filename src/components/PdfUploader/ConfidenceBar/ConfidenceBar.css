@@ -1,0 +1,21 @@
+.confidence-container {
+  position: relative;
+  height: 16px;
+  background: #eee;
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 4px 0 12px 0;
+}
+
+.confidence-bar {
+  height: 100%;
+  transition: width 0.3s ease-in-out;
+}
+
+.confidence-label {
+  position: absolute;
+  top: -22px;
+  right: 0;
+  font-size: 0.75em;
+  color: #333;
+}

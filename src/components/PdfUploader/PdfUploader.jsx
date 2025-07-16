@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import { createWorker } from "tesseract.js";
 import * as pdfjsLib from "pdfjs-dist";
 import './PdfUploader.css';
+import ConfidenceBar from './ConfidenceBar/ConfidenceBar'
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
   "pdfjs-dist/build/pdf.worker.min.js",
@@ -55,12 +56,15 @@ export default function PdfUploader() {
         const apiKey = localStorage.getItem("openai_api_key");
         if (apiKey) {
           try {
-            const aiResult = await improveInvoiceDataWithOpenAI(rawText, apiKey);
-            console.log("תוצאה משופרת מ-AI:", aiResult);
+            const aiResultText = await improveInvoiceDataWithOpenAI(rawText, apiKey);
+            const aiExtracted = extractFields(aiResultText);
+            aiExtracted.isAIEnhanced = true;
+            setExtractedData(aiExtracted);
           } catch (err) {
             console.error("שגיאה בשימוש ב-AI:", err);
           }
         }
+
 
         const formData = new FormData();
         formData.append("file", file);
@@ -126,11 +130,30 @@ export default function PdfUploader() {
       {extractedData && (
         <div style={{ marginTop: "20px" }}>
           <h3 className="green">נתונים מהחשבונית</h3>
-          <p><strong>מספר חשבונית:</strong> {extractedData.invoiceNumber.value} ({extractedData.invoiceNumber.confidence.toFixed(1)}%)</p>
-          <p><strong>תאריך:</strong> {extractedData.date.value} ({extractedData.date.confidence.toFixed(1)}%)</p>
-          <p><strong>ספק:</strong> {extractedData.vendor.value} ({extractedData.vendor.confidence.toFixed(1)}%)</p>
-          <p><strong>סכום לפני מע״מ:</strong> {extractedData.beforeVat.value} ({extractedData.beforeVat.confidence.toFixed(1)}%)</p>
-          <p><strong>סכום כולל:</strong> {extractedData.total.value} ({extractedData.total.confidence.toFixed(1)}%)</p>
+          <p>
+            <strong>מספר חשבונית:</strong> {extractedData.invoiceNumber.value}
+            <ConfidenceBar value={extractedData.invoiceNumber.confidence} />
+          </p>
+
+          <p>
+            <strong>תאריך:</strong> {extractedData.date.value}
+            <ConfidenceBar value={extractedData.date.confidence} />
+          </p>
+
+          <p>
+            <strong>ספק:</strong> {extractedData.vendor.value}
+            <ConfidenceBar value={extractedData.vendor.confidence} />
+          </p>
+
+          <p>
+            <strong>סכום לפני מע״מ:</strong> {extractedData.beforeVat.value}
+            <ConfidenceBar value={extractedData.beforeVat.confidence} />
+          </p>
+
+          <p>
+            <strong>סכום כולל:</strong> {extractedData.total.value}
+            <ConfidenceBar value={extractedData.total.confidence} />
+          </p>
           {confidence !== null && <p><strong>דיוק OCR כולל:</strong> {confidence.toFixed(1)}%</p>}
 
           <div style={{ marginTop: "10px" }}>
